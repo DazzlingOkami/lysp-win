@@ -27,17 +27,8 @@
 #include <errno.h>
 #include <assert.h>
 
-#ifndef BDWGC
-# error you did neither -DBDWGC=0 nor -DBDWGC=1 in the compilation command
-#endif
-
-#if BDWGC
-# include <gc/gc.h>
-# define GC_PROTECT(X)
-# define GC_UNPROTECT(X)
-#else
 # include "gc.h"
-#endif
+
 #define balloc	GC_malloc_atomic
 #define malloc	GC_malloc
 
@@ -771,7 +762,6 @@ Cell *repl(FILE *in)
   return value;
 }
 
-#if !BDWGC
 void markFunction(void *ptr)
 {
   Cell *cell= (Cell *)ptr;
@@ -799,18 +789,13 @@ void freeFunction(void *ptr)
   default:					return;
   }
 }
-#endif
 
 int main(int argc, char **argv)
 {
   int i;
 
-#if BDWGC
-  GC_INIT();
-#else
   GC_mark_function= markFunction;
   GC_free_function= freeFunction;
-#endif
 
   for (i= 0;  i < 256;  ++i) readers[i]= readIllegal;
   initReaders(readBlank,  " \t\n\v\f\r");

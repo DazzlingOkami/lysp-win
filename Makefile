@@ -6,15 +6,15 @@ CFLAGSs = -Os -g -Wall -DNDEBUG
 all : lysp.exe
 
 lysp : lysp.c gc.c dlfcn_cpt.c sbrk.c
-	$(CC) $(CFLAGS)  -DBDWGC=0 -o $@ lysp.c gc.c dlfcn_cpt.c sbrk.c
+	$(CC) $(CFLAGS)  -o $@ lysp.c gc.c dlfcn_cpt.c sbrk.c
 	size $@.exe
 
 olysp: lysp.c gc.c
-	$(CC) $(CFLAGSO) -DBDWGC=0 -o $@ lysp.c gc.c dlfcn_cpt.c sbrk.c
+	$(CC) $(CFLAGSO) -o $@ lysp.c gc.c dlfcn_cpt.c sbrk.c
 	size $@.exe
 
 ulysp: lysp.c gc.c
-	$(CC) $(CFLAGSs) -DBDWGC=0 -o $@ lysp.c gc.c dlfcn_cpt.c sbrk.c
+	$(CC) $(CFLAGSs) -o $@ lysp.c gc.c dlfcn_cpt.c sbrk.c
 	size $@.exe
 
 run : all
