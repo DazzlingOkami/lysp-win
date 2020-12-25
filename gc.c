@@ -22,7 +22,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
 
 #define ALIGN		sizeof(long)
@@ -30,6 +29,7 @@
 #define ALLOCS_PER_GC	10000
 
 #define VERBOSE	0
+void *sbrk(int inc);
 
 typedef struct _gcheader
 {

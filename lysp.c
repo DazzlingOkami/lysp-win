@@ -24,9 +24,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <ctype.h>
-#include <unistd.h>
 #include <errno.h>
-#include <sys/errno.h>
 #include <assert.h>
 
 #ifndef BDWGC
@@ -42,6 +40,14 @@
 #endif
 #define balloc	GC_malloc_atomic
 #define malloc	GC_malloc
+
+static int isatty(int fd)
+{
+    if (fd >= STDIN_FILENO && fd <= STDERR_FILENO)
+        return 1;
+    errno = EBADF;
+    return 0;
+}
 
 static void fatal(const char *fmt, ...)
 {
@@ -731,7 +737,7 @@ access(ptr)
 
 #undef access
 
-#include <dlfcn.h>
+#include "dlfcn_cpt.h"
 
 void *rtldDefault= 0;
 
