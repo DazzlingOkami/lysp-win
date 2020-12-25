@@ -140,6 +140,11 @@
 	(free memory)
 	s))))
 
+(define heap (dlsym "heap_used"))
 (define exit (dlsym "exit"))
 
+(let ((memory (malloc 1024)))
+  (sprintf memory "heap memory used %d bytes." (heap))
+  (puts memory) 
+  (free memory))
 (exit 0)

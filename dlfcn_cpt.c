@@ -40,6 +40,8 @@ extern Cell *charPeekSubr(Cell *args, Cell *env);
 extern Cell *charPokeSubr(Cell *args, Cell *env);
 extern Cell *primToStringSubr(Cell *args, Cell *env);
 
+extern int heap_used(void);
+
 void *dlsym(void *module, const char *name){
 
     EXPORT_SYM(flambdaFsubr);
@@ -80,6 +82,8 @@ void *dlsym(void *module, const char *name){
     EXPORT_SYM(free);
     EXPORT_SYM(sprintf);
     EXPORT_SYM(exit);
+
+    EXPORT_SYM(heap_used);
 
     return (void*)0;
 }
