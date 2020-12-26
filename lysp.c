@@ -32,14 +32,6 @@
 #define balloc    GC_malloc_atomic
 #define malloc    GC_malloc
 
-static int isatty(int fd)
-{
-    if (fd >= STDIN_FILENO && fd <= STDERR_FILENO)
-        return 1;
-    errno = EBADF;
-    return 0;
-}
-
 static void fatal(const char *fmt, ...)
 {
     va_list ap;
@@ -750,7 +742,7 @@ Cell *repl(FILE *in)
     GC_PROTECT(expr);
     GC_PROTECT(value);
     while (!feof(in)) {
-        if (isatty(fileno(in))) {
+        if (in == stdin) {
             printf("> ");
             fflush(stdout);
         }
@@ -759,7 +751,7 @@ Cell *repl(FILE *in)
         if (xFlag) println(expr, stderr);
         if (expr) {
             value= eval(expr, globals);
-            if (isatty(fileno(in))) println(value, stderr);
+            if (in == stdin) println(value, stderr);
             if (vFlag) {
                 fprintf(stderr, "==> ");
                 println(value, stderr);
