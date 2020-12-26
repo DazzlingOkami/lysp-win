@@ -2,25 +2,29 @@ CC      = gcc
 CFLAGS  = -O  -g -Wall
 CFLAGSO = -O3 -g -Wall -DNDEBUG
 CFLAGSs = -Os -g -Wall -DNDEBUG
+CFLAGSstd = -O -g -Wall -std=c99
 
-all : lysp.exe
+all : lysp
 
 lysp : lysp.c gc.c dlfcn_cpt.c sbrk.c
 	$(CC) $(CFLAGS)  -o $@ lysp.c gc.c dlfcn_cpt.c sbrk.c
 	size $@.exe
 
-olysp: lysp.c gc.c
+olysp: lysp.c gc.c dlfcn_cpt.c sbrk.c
 	$(CC) $(CFLAGSO) -o $@ lysp.c gc.c dlfcn_cpt.c sbrk.c
 	size $@.exe
 
-ulysp: lysp.c gc.c
+ulysp: lysp.c gc.c dlfcn_cpt.c sbrk.c
 	$(CC) $(CFLAGSs) -o $@ lysp.c gc.c dlfcn_cpt.c sbrk.c
 	size $@.exe
+
+glysp: lysp.c gc.c dlfcn_cpt.c sbrk.c
+	$(CC) $(CFLAGSstd)  -o $@ lysp.c gc.c dlfcn_cpt.c sbrk.c
 
 run : all
 	./lysp.exe -v -x test.l
 
-test : lysp.exe olysp.exe ulysp.exe
+test : lysp olysp ulysp
 	@echo
 	./lysp.exe -v -x bench.l
 	@echo
@@ -29,6 +33,7 @@ test : lysp.exe olysp.exe ulysp.exe
 	./olysp.exe -v -x bench.l
 
 clean : .FORCE
-	rm -rf *~ *.o lysp olysp ulysp *.dSYM
+	del *.exe
+	del *.o
 
 .FORCE :
