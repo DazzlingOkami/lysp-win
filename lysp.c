@@ -29,9 +29,6 @@
 
 #include "gc.h"
 
-#define balloc    GC_malloc_atomic
-#define malloc    GC_malloc
-
 static void fatal(const char *fmt, ...)
 {
     va_list ap;
@@ -71,15 +68,15 @@ struct _Cell
     };
 };
 
-Cell *mkNumber(long n)          { Cell *self= balloc(sizeof(Cell));  self->mTag= Number;  self->mNumber= n;                 return self; }
-Cell *mkString(const char *s)   { Cell *self= balloc(sizeof(Cell));  self->mTag= String;  self->mString= s;                 return self; }
-Cell *mkSymbol(const char *s)   { Cell *self= balloc(sizeof(Cell));  self->mTag= Symbol;  self->mString= s;                 return self; }
-Cell *cons(Cell *a, Cell *d)    { Cell *self= malloc(sizeof(Cell));  self->mTag= Cons;    self->mCons.a= a; self->mCons.d= d;       return self; }
-Cell *mkSubr(Subr_t fn)         { Cell *self= balloc(sizeof(Cell));  self->mTag= Subr;    self->mSubr= fn;                  return self; }
-Cell *mkFsubr(Subr_t fn)        { Cell *self= balloc(sizeof(Cell));  self->mTag= Fsubr;   self->mSubr= fn;                  return self; }
-Cell *mkExpr(Cell *x, Cell *e)  { Cell *self= malloc(sizeof(Cell));  self->mTag= Expr;    self->mExpr.expr= x;  self->mExpr.env= e; return self; }
-Cell *mkFexpr(Cell *x, Cell *e) { Cell *self= malloc(sizeof(Cell));  self->mTag= Fexpr;   self->mExpr.expr= x;  self->mExpr.env= e; return self; }
-Cell *mkPsubr(Subr_t fn)        { Cell *self= balloc(sizeof(Cell));  self->mTag= Psubr;   self->mSubr= fn;                  return self; }
+Cell *mkNumber(long n)          { Cell *self= GC_malloc_atomic(sizeof(Cell));  self->mTag= Number;  self->mNumber= n;                 return self; }
+Cell *mkString(const char *s)   { Cell *self= GC_malloc_atomic(sizeof(Cell));  self->mTag= String;  self->mString= s;                 return self; }
+Cell *mkSymbol(const char *s)   { Cell *self= GC_malloc_atomic(sizeof(Cell));  self->mTag= Symbol;  self->mString= s;                 return self; }
+Cell *cons(Cell *a, Cell *d)    { Cell *self= GC_malloc       (sizeof(Cell));  self->mTag= Cons;    self->mCons.a= a; self->mCons.d= d;       return self; }
+Cell *mkSubr(Subr_t fn)         { Cell *self= GC_malloc_atomic(sizeof(Cell));  self->mTag= Subr;    self->mSubr= fn;                  return self; }
+Cell *mkFsubr(Subr_t fn)        { Cell *self= GC_malloc_atomic(sizeof(Cell));  self->mTag= Fsubr;   self->mSubr= fn;                  return self; }
+Cell *mkExpr(Cell *x, Cell *e)  { Cell *self= GC_malloc       (sizeof(Cell));  self->mTag= Expr;    self->mExpr.expr= x;  self->mExpr.env= e; return self; }
+Cell *mkFexpr(Cell *x, Cell *e) { Cell *self= GC_malloc       (sizeof(Cell));  self->mTag= Fexpr;   self->mExpr.expr= x;  self->mExpr.env= e; return self; }
+Cell *mkPsubr(Subr_t fn)        { Cell *self= GC_malloc_atomic(sizeof(Cell));  self->mTag= Psubr;   self->mSubr= fn;                  return self; }
 
 int nilP(Cell *self)    { return !self; }
 int numberP(Cell *self) { return self && self->mTag == Number; }
