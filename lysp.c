@@ -68,9 +68,11 @@ struct _Cell
     };
 };
 
+static char *stringdup(const char *s) {return strcpy(malloc(strlen(s) + 1), s);}
+
 Cell *mkNumber(long n)          { Cell *self= GC_malloc_atomic(sizeof(Cell));  self->mTag= Number;  self->mNumber= n;                 return self; }
-Cell *mkString(const char *s)   { Cell *self= GC_malloc_atomic(sizeof(Cell));  self->mTag= String;  self->mString= s;                 return self; }
-Cell *mkSymbol(const char *s)   { Cell *self= GC_malloc_atomic(sizeof(Cell));  self->mTag= Symbol;  self->mString= s;                 return self; }
+Cell *mkString(const char *s)   { Cell *self= GC_malloc_atomic(sizeof(Cell));  self->mTag= String;  self->mString= stringdup(s);      return self; }
+Cell *mkSymbol(const char *s)   { Cell *self= GC_malloc_atomic(sizeof(Cell));  self->mTag= Symbol;  self->mString= stringdup(s);      return self; }
 Cell *cons(Cell *a, Cell *d)    { Cell *self= GC_malloc       (sizeof(Cell));  self->mTag= Cons;    self->mCons.a= a; self->mCons.d= d;       return self; }
 Cell *mkSubr(Subr_t fn)         { Cell *self= GC_malloc_atomic(sizeof(Cell));  self->mTag= Subr;    self->mSubr= fn;                  return self; }
 Cell *mkFsubr(Subr_t fn)        { Cell *self= GC_malloc_atomic(sizeof(Cell));  self->mTag= Fsubr;   self->mSubr= fn;                  return self; }
@@ -127,7 +129,7 @@ Cell *intern(const char *s)
     for (cell= interns;  cell;  cell= cdr(cell))
         if (!strcmp(symbol(car(cell)), s))
             return car(cell);
-    cell= mkSymbol(strdup(s));
+    cell= mkSymbol(s);
     GC_PROTECT(cell);
     interns= cons(cell, interns);
     GC_UNPROTECT(cell);
@@ -260,7 +262,7 @@ Cell *readString(int d, FILE *in)
     while ((c= getc(in)) > 0 && c != d) if ('\\' == (buf[index++]= c)) buf[index++]= getc(in);
     if (c != d) fatal("EOF in string");
     buf[index]= '\0';
-    return mkString(strdup(buf));
+    return mkString(buf);
 }
 
 Cell *readQuote(int c, FILE *in)
@@ -706,7 +708,7 @@ relation(greater,      > )
 int numbersP2(Cell *args) { return numberP(car(args)) && numberP(cadr(args)); }
 int numbersP3(Cell *args) { return numberP(car(args)) && numberP(cadr(args)) && numberP(caddr(args)); }
 
-Cell *primToStringSubr(Cell *args) { return numberP(car(args)) ? mkString(strdup((char *)number(car(args)))) : 0; }
+Cell *primToStringSubr(Cell *args) { return numberP(car(args)) ? mkString((char *)number(car(args))) : 0; }
 
 typedef void *ptr;
 
