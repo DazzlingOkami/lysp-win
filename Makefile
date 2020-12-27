@@ -6,20 +6,20 @@ CFLAGSstd = -O -g -Wall -std=c99
 
 all : lysp
 
-lysp : lysp.c gc.c dlfcn_cpt.c sbrk.c
-	$(CC) $(CFLAGS)  -o $@ lysp.c gc.c dlfcn_cpt.c sbrk.c
+lysp : lysp.c gc.c dlfcn_cpt.c
+	$(CC) $(CFLAGS)  -o $@ lysp.c gc.c dlfcn_cpt.c
 	size $@.exe
 
-olysp: lysp.c gc.c dlfcn_cpt.c sbrk.c
-	$(CC) $(CFLAGSO) -o $@ lysp.c gc.c dlfcn_cpt.c sbrk.c
+olysp: lysp.c gc.c dlfcn_cpt.c
+	$(CC) $(CFLAGSO) -o $@ lysp.c gc.c dlfcn_cpt.c
 	size $@.exe
 
-ulysp: lysp.c gc.c dlfcn_cpt.c sbrk.c
-	$(CC) $(CFLAGSs) -o $@ lysp.c gc.c dlfcn_cpt.c sbrk.c
+ulysp: lysp.c gc.c dlfcn_cpt.c
+	$(CC) $(CFLAGSs) -o $@ lysp.c gc.c dlfcn_cpt.c
 	size $@.exe
 
-glysp: lysp.c gc.c dlfcn_cpt.c sbrk.c
-	$(CC) $(CFLAGSstd)  -o $@ lysp.c gc.c dlfcn_cpt.c sbrk.c
+glysp: lysp.c gc.c dlfcn_cpt.c
+	$(CC) $(CFLAGSstd)  -o $@ lysp.c gc.c dlfcn_cpt.c
 
 run : all
 	./lysp.exe -v -x test.l

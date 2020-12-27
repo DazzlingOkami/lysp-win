@@ -140,11 +140,16 @@
 	(free memory)
 	s))))
 
-(define heap (dlsym "heap_used"))
-(define exit (dlsym "exit"))
+(define heap (dlsym "heap_max_used"))
+(define GC_count_objects (dlsym "GC_count_objects"))
+(define GC_count_bytes (dlsym "GC_count_bytes"))
 
 (let ((memory (malloc 1024)))
   (sprintf memory "heap memory used %d bytes." (heap))
   (puts memory) 
+  (sprintf memory "alive: %d bytes in %d objects." (GC_count_bytes) (GC_count_objects))
+  (puts memory) 
   (free memory))
+
+(define exit (dlsym "exit"))
 (exit 0)

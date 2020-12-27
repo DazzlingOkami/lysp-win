@@ -27,9 +27,9 @@
 #define ALIGN   sizeof(long)
 #define QUANTUM 32768
 #define ALLOCS_PER_GC 10000
+#define GC_HEAP_MEM_SIZE (2 * 1024 * 1024)
 
 #define VERBOSE 0
-void *sbrk(int inc);
 
 typedef struct _gcheader
 {
@@ -53,6 +53,22 @@ static gcheader  gcbase= { { -1 }, &gcbase, &gcbase, 0 };
 static gcheader *gcnext= &gcbase;
 
 static int gcCount= ALLOCS_PER_GC;
+
+static int pos = 0;
+static void *heap_inc(int inc){
+    #if VERBOSE
+    printf("alive: %d bytes in %d objects\n", GC_count_bytes(), GC_count_objects());
+    #endif
+    static char mem[GC_HEAP_MEM_SIZE];
+    if(pos + inc >= GC_HEAP_MEM_SIZE) return (void*)-1;
+    void *p = mem + pos;
+    pos += inc;
+    return p;
+}
+
+int heap_max_used(void){
+    return pos;
+}
 
 void *GC_malloc(size_t lbs)
 {
@@ -107,7 +123,7 @@ again:
     size_t incr= QUANTUM;
     size_t req= sizeof(gcheader) + lbs;
     while (incr <= req) incr *= 2;
-    hdr= (gcheader *)sbrk(incr);
+    hdr= (gcheader *)heap_inc(incr);
     if (hdr != (gcheader *)-1)
     {
         hdr->flags= 0;
