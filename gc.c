@@ -210,7 +210,7 @@ void GC_default_mark_function(void *ptr)
     {
         void *field= *pos;
         if (field && !((long)field & 1))
-        GC_mark(field);
+            GC_mark(field);
         ++pos;
     }
 }
