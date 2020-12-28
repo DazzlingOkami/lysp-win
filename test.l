@@ -32,7 +32,6 @@
 (define !=	(subr (dlsym "notEqualSubr")))
 (define >=	(subr (dlsym "greaterEqualSubr")))
 (define >	(subr (dlsym "greaterSubr")))
-(define println	(subr (dlsym "printlnSubr")))
 
 (define caar	(lambda (x) (car (car x))))
 (define cadr	(lambda (x) (car (cdr x))))
