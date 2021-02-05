@@ -585,6 +585,41 @@ Cell *andFsubr(Cell *args, Cell *env)
     return value;
 }
 
+Cell *atomSubr(Cell *args, Cell *env)
+{
+    Cell *value;
+    value = car(args);
+    return (nilP(value) || symbolP(value)) ? _S_t : 0;
+}
+
+Cell *eqSubr(Cell *args, Cell *env)
+{
+    Cell *value1;
+    Cell *value2;
+    value1 = car(args);
+    value2 = cadr(args);
+    if(nilP(value1) && nilP(value2))
+        return _S_t;
+    if(!symbolP(value1) || !symbolP(value2))
+        return 0;
+    return strcmp(symbol(value1), symbol(value2)) == 0 ? _S_t : 0;
+}
+
+Cell *condFsubr(Cell *args, Cell *env)
+{
+    Cell *cell = 0;
+    GC_PROTECT(args);
+    GC_PROTECT(env);
+    for (; args; args = cdr(args))
+        if(eval(caar(args), env))
+        {
+            cell = eval(cadar(args), env);
+            break;
+        }
+    GC_UNPROTECT(args);
+    return cell;
+}
+
 Cell *ifFsubr(Cell *args, Cell *env)
 {
     Cell *cell;

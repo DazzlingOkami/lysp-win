@@ -41,6 +41,9 @@ extern Cell *charPokeSubr(Cell *args, Cell *env);
 extern Cell *primToStringSubr(Cell *args, Cell *env);
 extern Cell *orFsubr(Cell *args, Cell *env);
 extern Cell *andFsubr(Cell *args, Cell *env);
+extern Cell *atomSubr(Cell *args, Cell *env);
+extern Cell *eqSubr(Cell *args, Cell *env);
+extern Cell *condFsubr(Cell *args, Cell *env);
 
 extern int heap_max_used(void);
 extern size_t GC_count_objects(void);
@@ -83,6 +86,9 @@ void *dlsym(void *module, const char *name){
     EXPORT_SYM(primToStringSubr);
     EXPORT_SYM(orFsubr);
     EXPORT_SYM(andFsubr);
+    EXPORT_SYM(atomSubr);
+    EXPORT_SYM(eqSubr);
+    EXPORT_SYM(condFsubr);
 
     EXPORT_SYM(puts);
     EXPORT_SYM(malloc);

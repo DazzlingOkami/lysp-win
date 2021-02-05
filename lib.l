@@ -23,6 +23,9 @@
 (define apply   (subr (dlsym "applySubr")))
 (define map     (subr (dlsym "mapSubr")))
 (define assq    (subr (dlsym "assqSubr")))
+(define atom    (subr (dlsym "atomSubr")))
+(define eq      (subr (dlsym "eqSubr")))
+(define cond    (fsubr (dlsym "condFsubr")))
 
 (define println (subr (dlsym "printlnSubr")))
 

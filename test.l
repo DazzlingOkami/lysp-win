@@ -11,6 +11,10 @@
 (define while	(fsubr (dlsym "whileFsubr")))
 (define setq 	(fsubr (dlsym "setqFsubr")))
 
+(define atom    (subr (dlsym "atomSubr")))
+(define eq      (subr (dlsym "eqSubr")))
+(define cond    (fsubr (dlsym "condFsubr")))
+
 (define cons	(subr (dlsym "consSubr")))
 (define rplaca	(subr (dlsym "rplacaSubr")))
 (define rplacd	(subr (dlsym "rplacdSubr")))
@@ -138,6 +142,8 @@
       (let ((s (ptr->string memory)))
 	(free memory)
 	s))))
+
+(cond ((eq 'a 'b) 'first) ((atom 'a) 'second))
 
 (define heap (dlsym "heap_max_used"))
 (define GC_count_objects (dlsym "GC_count_objects"))
