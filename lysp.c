@@ -443,6 +443,7 @@ Cell *apply(Cell *fn, Cell *args, Cell *env)
     GC_PROTECT(env);
     if (fn)
         switch (fn->mTag) {
+            case Cons:  return apply(eval(fn, env), args, env);
             case Subr:  return subr(fn)(evargs(args, env), env);
             case Fsubr: return fsubr(fn)(args, env);
             case Expr: {
@@ -469,7 +470,7 @@ Cell *apply(Cell *fn, Cell *args, Cell *env)
             }
             default: break;
         }
-    fprintf(stderr, "cannot apply: ");
+    fprintf(stderr, "cannot apply(%d): ", fn ? fn->mTag : -1);
     println(fn, stderr);
     return 0;
 }

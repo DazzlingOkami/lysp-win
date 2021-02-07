@@ -103,6 +103,8 @@
 (assqval 'baz dict)
 (assqval 'qux dict)
 
+((lambda (f) (f '(b c))) '(lambda (x) (cons 'a x)))
+
 (define puts (dlsym "puts"))
 
 (puts "Hello, world")
