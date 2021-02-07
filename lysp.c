@@ -518,6 +518,22 @@ Cell *defineFsubr(Cell *args, Cell *env)
     return cell;
 }
 
+Cell *defunFsubr(Cell *args, Cell *env)
+{
+    Cell *tmp, *cell = 0;
+    GC_PROTECT(args);
+    GC_PROTECT(env);
+    if (args) {
+        GC_PROTECT(tmp);
+        tmp = mkExpr(cdr(args), env);
+        tmp = cons(tmp, 0);
+        tmp = cons(car(args), tmp);
+        cell = defineFsubr(tmp, env);
+    }
+    GC_UNPROTECT(args);
+    return cell;
+}
+
 Cell *setqFsubr(Cell *args, Cell *env)
 {
     Cell *key, *value= 0;
@@ -860,6 +876,7 @@ int main(int argc, char **argv)
     globals= cons(cons(intern("fsubr"   ), mkSubr (fsubrSubr    )), globals);
     globals= cons(cons(intern("subr"    ), mkSubr (subrSubr     )), globals);
     globals= cons(cons(intern("define"  ), mkFsubr(defineFsubr  )), globals);
+    globals= cons(cons(intern("defun"   ), mkFsubr(defunFsubr   )), globals);
 
     globals= cons((syntaxTable= cons(intern("*syntax-table*"), 0)), globals);
 
