@@ -552,6 +552,8 @@ Cell *setqFsubr(Cell *args, Cell *env)
         rplacd(cell, value);
     }
     GC_UNPROTECT(args);
+    if(cdr(cdr(args)))
+        return setqFsubr(cdr(cdr(args)), env);
     return value;
 }
 
