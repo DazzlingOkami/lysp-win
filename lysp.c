@@ -639,6 +639,26 @@ Cell *condFsubr(Cell *args, Cell *env)
     return cell;
 }
 
+Cell *quasiquoteFsubr(Cell *args, Cell *env)
+{
+    Cell *cell, *ret, *tail;
+    GC_PROTECT(args);
+    GC_PROTECT(env);
+    GC_PROTECT(ret);
+    args = car(args);
+    if(!consP(args)) return args;
+    ret = tail = cons(0, 0);
+    for (; args; args = cdr(args)){
+        cell = car(args);
+        if(consP(cell) && strcmp("unquote", symbol(car(cell))) == 0){
+            cell = eval(cadr(cell), env);
+        }
+        tail = rplacd(tail, cons(cell, 0));
+    }
+    GC_UNPROTECT(args);
+    return cdr(ret);
+}
+
 Cell *ifFsubr(Cell *args, Cell *env)
 {
     Cell *cell;

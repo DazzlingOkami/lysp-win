@@ -49,6 +49,7 @@
 (define caddar (lambda (x) (car (cdr (cdr (car x))))))
 
 (define quote (flambda (form) (car form)))
+(define quasiquote (fsubr (dlsym "quasiquoteFsubr")))
 (define list  (lambda args args))
 
 (define global-environment

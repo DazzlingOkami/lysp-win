@@ -45,6 +45,7 @@
 (define caddar	(lambda (x) (car (cdr (cdr (car x))))))
 
 (define quote	(flambda (form) (car form)))
+(define quasiquote (fsubr (dlsym "quasiquoteFsubr")))
 (define list	(lambda args args))
 
 (define global-environment
@@ -104,6 +105,8 @@
 (assqval 'qux dict)
 
 ((lambda (f) (f '(b c))) '(lambda (x) (cons 'a x)))
+
+`(a ,(car '(b c)))
 
 (define puts (dlsym "puts"))
 
