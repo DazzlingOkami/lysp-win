@@ -1,7 +1,7 @@
 CC      = gcc
 CFLAGS  = -O  -g -Wall
 CFLAGSO = -O3 -g -Wall -DNDEBUG
-CFLAGSs = -Os -g -Wall -DNDEBUG
+CFLAGSs = -s -Os -g -Wall -DNDEBUG
 CFLAGSstd = -O -g -Wall -std=c99
 
 all : lysp
