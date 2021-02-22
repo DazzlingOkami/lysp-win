@@ -154,8 +154,14 @@ Cell *print(Cell *self, FILE *stream)
             case Symbol: fprintf(stream, "%s",         symbol(self)); break;
             case Subr:   fprintf(stream, "subr<%p>",   subr(self));   break;
             case Fsubr:  fprintf(stream, "fsubr<%p>",  fsubr(self));  break;
-            case Expr:   fprintf(stream, "(lambda ");  print(expr(self), stream);  fprintf(stream, ")"); break;
-            case Fexpr:  fprintf(stream, "(flambda "); print(fexpr(self), stream); fprintf(stream, ")"); break;
+            case Expr:   fprintf(stream, "(lambda ");
+                print(car(expr(self)), stream); fputc(' ', stream);
+                print(cadr(expr(self)), stream);
+                fprintf(stream, ")"); break;
+            case Fexpr:  fprintf(stream, "(flambda ");
+                print(car(fexpr(self)), stream); fputc(' ', stream);
+                print(cadr(fexpr(self)), stream);
+                fprintf(stream, ")"); break;
             case Psubr:  fprintf(stream, "psubr<%p>",  psubr(self));  break;
             case Cons: {
                 fprintf(stream, "(");
