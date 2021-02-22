@@ -443,6 +443,7 @@ Cell *apply(Cell *fn, Cell *args, Cell *env)
     GC_PROTECT(env);
     if (fn)
         switch (fn->mTag) {
+            case Symbol:
             case Cons:  return apply(eval(fn, env), args, env);
             case Subr:  return subr(fn)(evargs(args, env), env);
             case Fsubr: return fsubr(fn)(args, env);
