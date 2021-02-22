@@ -108,6 +108,12 @@
 
 `(a ,(car '(b c)))
 
+(define addvar (lambda (var) `(lambda (x) ,`(+ x ,var))))
+;; quasiquote` has no effect on inner brackets. if want to pass inner, use ,` before brackets.
+
+(define inc1 (addvar 1))
+(inc1 12)
+
 (define puts (dlsym "puts"))
 
 (puts "Hello, world")
