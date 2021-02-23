@@ -653,11 +653,18 @@ Cell *quasiquoteFsubr(Cell *args, Cell *env)
     GC_PROTECT(env);
     GC_PROTECT(ret);
     args = car(args);
-    if(!consP(args)) return args;
+    if(!consP(args)){
+        GC_UNPROTECT(args);
+        return args;
+    }
+    if(symbolP(car(args)) && strcmp("unquote", symbol(car(args))) == 0){
+        GC_UNPROTECT(args);
+        return eval(cadr(args), env);
+    }
     ret = tail = cons(0, 0);
     for (; args; args = cdr(args)){
         cell = car(args);
-        if(consP(cell) && strcmp("unquote", symbol(car(cell))) == 0){
+        if(consP(cell) && symbolP(car(cell)) && strcmp("unquote", symbol(car(cell))) == 0){
             cell = eval(cadr(cell), env);
         }
         tail = rplacd(tail, cons(cell, 0));
