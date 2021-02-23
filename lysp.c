@@ -849,6 +849,25 @@ Cell *repl(FILE *in)
     return value;
 }
 
+Cell *loadfileSubr(Cell *args, Cell *env){
+    FILE *in;
+    Cell *ret = 0;
+    GC_PROTECT(args);
+    GC_PROTECT(env);
+    GC_PROTECT(ret);
+    for (; args; args= cdr(args)){
+        in = fopen(string(car(args)), "r");
+        if(!in){
+            GC_UNPROTECT(args);
+            return 0;
+        }
+        ret = repl(in);
+        fclose(in);
+    }
+    GC_UNPROTECT(args);
+    return ret;
+}
+
 void markFunction(void *ptr)
 {
     Cell *cell= (Cell *)ptr;
@@ -913,6 +932,7 @@ int main(int argc, char **argv)
     globals= cons(cons(intern("subr"    ), mkSubr (subrSubr     )), globals);
     globals= cons(cons(intern("define"  ), mkFsubr(defineFsubr  )), globals);
     globals= cons(cons(intern("defun"   ), mkFsubr(defunFsubr   )), globals);
+    globals= cons(cons(intern("load"    ), mkSubr (loadfileSubr )), globals);
 
     globals= cons((syntaxTable= cons(intern("*syntax-table*"), 0)), globals);
 
