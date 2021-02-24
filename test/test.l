@@ -156,6 +156,29 @@
 
 (cond ((eq 'a 'b) 'first) ((atom 'a) 'second))
 
+(define sort-ins
+  (lambda (arr v)
+    (cond
+      ((atom arr) (cons v '()))
+      ((< v (car arr)) (cons v arr))
+      ('t  (cons (car arr) (sort-ins (cdr arr) v)))
+      )))
+
+(sort-ins '(1 3 7) 2)
+;; sort inster
+;; => (1 2 3 7)
+
+(define sort
+  (lambda (arr rdy)
+    (cond
+      ((atom arr) rdy)
+      ('t (sort (cdr arr) (sort-ins rdy (car arr))))
+    )))
+
+(sort '(49 38 65 97 76 13 27 49 10))
+;; sort
+;; => (10 13 27 38 49 49 65 76 97)
+
 (define heap (dlsym "heap_max_used"))
 (define GC_count_objects (dlsym "GC_count_objects"))
 (define GC_count_bytes (dlsym "GC_count_bytes"))
