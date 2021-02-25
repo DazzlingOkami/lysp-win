@@ -179,6 +179,23 @@
 ;; sort
 ;; => (10 13 27 38 49 49 65 76 97)
 
+(define append
+  (lambda (arr v)
+    (cond
+      ((atom arr) (cons v '()))
+      ('t (cons (car arr) (append (cdr arr) v)))
+      )))
+
+(define reverse
+  (lambda (arr)
+    (cond
+      ((atom arr) arr)
+      ('t (append (reverse (cdr arr)) (car arr)))
+      )))
+
+(reverse '(1 2 3 4 5))
+;; => (5 4 3 2 1)
+
 (define heap (dlsym "heap_max_used"))
 (define GC_count_objects (dlsym "GC_count_objects"))
 (define GC_count_bytes (dlsym "GC_count_bytes"))
