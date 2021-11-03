@@ -307,6 +307,12 @@ Cell *readUquote(int c, FILE *in)
     return cell;
 }
 
+Cell *readSemi(int c, FILE *in)
+{
+    while ((c= getc(in)) && (c != '\n') && (c != '\r'));
+    return 0;
+}
+
 Cell *readList(int d, FILE *in)
 {
     Cell *head, *tail, *cell= 0;
@@ -322,14 +328,24 @@ Cell *readList(int d, FILE *in)
     for (;;) {
         while (isspace((c= getc(in))));
         if (c == d) break;
-        if (c == ')' || c == ']' || c == '}') fatal("mismatched parentheses");
-        if (c == '.')
+        switch(c){
+        case ')':
+        case ']':
+        case '}':
+            fatal("mismatched parentheses");
+            break;
+        case ';':
+            readSemi(c, in);
+            continue;
+        case '.':
             rplacd(tail, readFile(in));
-        else {
+            break;
+        default:
             ungetc(c, in);
             cell= readFile(in);
             if (feof(in)) fatal("EOF in list");
             tail= rplacd(tail, cons(cell, 0));
+            break;
         }
     }
     head= cdr(head);
@@ -343,12 +359,6 @@ Cell *readList(int d, FILE *in)
     }
     GC_UNPROTECT(head);
     return head ? head : (Cell *)-1;
-}
-
-Cell *readSemi(int c, FILE *in)
-{
-    while ((c= getc(in)) && (c != '\n') && (c != '\r'));
-    return 0;
 }
 
 Cell *readFile(FILE *in)

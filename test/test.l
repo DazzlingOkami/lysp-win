@@ -196,6 +196,17 @@
 (reverse '(1 2 3 4 5))
 ;; => (5 4 3 2 1)
 
+(+ 5;this is fine
+   5)
+
+(define main;this is also fine
+  (;still ok
+   lambda (x
+            ;also cool
+            )
+   (println "hello world";you guessed it: fine
+          )))
+
 (define heap (dlsym "heap_max_used"))
 (define GC_count_objects (dlsym "GC_count_objects"))
 (define GC_count_bytes (dlsym "GC_count_bytes"))
